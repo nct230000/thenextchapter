@@ -47,10 +47,10 @@ struct CommunityEvent: Identifiable, Hashable {
         id: "bingo", title: "Bingo & Board Games", category: "Games",
         day: 20261101, startMinute: 19 * 60, duration: 90,
         venue: "Diner Café", distance: 1.4, commuteMinutes: nil, price: 5,
-        size: .small, ageGroup: "All ages", tags: ["Indoors", "Board games"],
+        size: .small, ageGroup: "All ages", tags: ["Indoors", "Board games", "Beginner-friendly"],
         languages: "English", newcomers: 8,
-        description: "Join a relaxed round of bingo or pull up a chair for a board game. You can learn the rules at the table.",
-        arrivalInfo: "Indoor seating · Food and drinks purchased separately", suggestedOutingName: "Dallas game night")
+       description: "Join us for a night of bingo and board games! Play either or play both. Bring your own board game or choose from one of ours. Our hosts will be happy to fill you in on the rules.",
+        arrivalInfo: "Indoor seating · Beginner-friendly · Food and drinks purchased separately", suggestedOutingName: "Dallas game night")
 
     static let all = [potluck, coffee, bingo]
     static let calendar = Calendar(identifier: .gregorian)
