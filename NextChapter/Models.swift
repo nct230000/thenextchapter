@@ -49,7 +49,7 @@ struct CommunityEvent: Identifiable, Hashable {
         venue: "Diner Café", distance: 1.4, commuteMinutes: nil, price: 5,
         size: .small, ageGroup: "All ages", tags: ["Indoors", "Board games", "Beginner-friendly"],
         languages: "English", newcomers: 8,
-       description: "Join us for a night of bingo and board games! Play either or play both. Bring your own board game or choose from one of ours. Our hosts will be happy to fill you in on the rules.",
+       description: "Join us for a night of bingo and board games! Play either or play both. Bring your own board game or play one of ours. Our hosts will be happy to fill you in on the rules.",
         arrivalInfo: "Indoor seating · Beginner-friendly · Food and drinks purchased separately", suggestedOutingName: "Dallas game night")
 
     static let all = [potluck, coffee, bingo]
