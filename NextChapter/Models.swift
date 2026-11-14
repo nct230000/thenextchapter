@@ -39,7 +39,7 @@ struct CommunityEvent: Identifiable, Hashable {
         id: "coffee", title: "Coffee, conversation & connection", category: "Meet & mingle",
         day: 20261025, startMinute: 10 * 60, duration: 90,
         venue: "Chapter House Café", distance: 1.4, commuteMinutes: 10, price: 0,
-        size: .small, ageGroup: "Adults", tags: ["Indoors", "Conversation"],
+        size: .small, ageGroup: "Adults", tags: ["Indoors", "Conversation", "Coffee", "Newcomers"],
         languages: "English", newcomers: 10,
         description: "Small tables and friendly conversation prompts make it easy to meet others making Dallas home. All English levels welcome.",
         arrivalInfo: "Indoor seating · Drinks purchased separately", suggestedOutingName: "Our first Dallas coffee")
