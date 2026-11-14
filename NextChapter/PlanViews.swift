@@ -28,10 +28,12 @@ enum PlannerStep: Int, CaseIterable {
         case .confirmed: "The first step is a little easier together."
         }
     }
-    var eyebrow: String {
-        if self == .review { return "ONE LAST LOOK" }
-        if self == .confirmed { return "YOUR NEXT CHAPTER STARTS HERE" }
-        return "OUTING · \(rawValue) OF 7"
+    var eyebrow: String? {
+        switch self {
+        case .review: "ONE LAST LOOK"
+        case .confirmed: "YOUR NEXT CHAPTER STARTS HERE"
+        default: nil
+        }
     }
 }
 
@@ -63,9 +65,12 @@ struct OutingPlanner: View {
     @State private var draft: Outing
     @State private var step: PlannerStep
     @State private var reviewed = false
-    @State private var discard = false
+    @State private var showConfirmation = false
+    @State private var restarting = false
+    private let initial: Outing
     let editing: Bool
     init(initial: Outing, editing: Bool = false) {
+        self.initial = initial
         _draft = State(initialValue: initial)
         _step = State(initialValue: editing ? .name : .event)
         self.editing = editing
@@ -85,7 +90,16 @@ struct OutingPlanner: View {
             ScrollViewReader { proxy in
                 ChapterPage {
                     Color.clear.frame(height: 0).id("top")
-                    PageHeading(eyebrow: step.eyebrow, title: step.title, subtitle: step.subtitle.isEmpty ? nil : step.subtitle)
+                    if let eyebrow = step.eyebrow {
+                        PageHeading(eyebrow: eyebrow, title: step.title, subtitle: step.subtitle.isEmpty ? nil : step.subtitle)
+                    } else {
+                        Text("MAKING PLANS · PAGE \(step.rawValue) / 7")
+                            .font(ChapterTheme.label).foregroundStyle(ChapterTheme.green)
+                            .accessibilityLabel("Making plans, step \(step.rawValue) of 7")
+                        ProgressView(value: Double(step.rawValue), total: 7)
+                            .tint(ChapterTheme.green).accessibilityHidden(true)
+                        PageHeading(title: step.title, subtitle: step.subtitle)
+                    }
                     stepContent
                     if step.rawValue < PlannerStep.review.rawValue {
                         Button(step == .settings ? "Review outing →" : "Continue →") { advance() }
@@ -96,19 +110,44 @@ struct OutingPlanner: View {
                         }.buttonStyle(ChapterButtonStyle(primary: true)).disabled(!canContinue).accessibilityIdentifier("confirm-outing")
                         Text("Invitations have not been sent.").font(ChapterTheme.small).foregroundStyle(ChapterTheme.muted)
                     }
-                    if step.rawValue > 1 && step != .confirmed {
-                        Button("← Back") { reviewed = false; step = PlannerStep(rawValue: step.rawValue - 1) ?? .event }
-                            .buttonStyle(ChapterButtonStyle(quiet: true))
-                    }
                 }.onChange(of: step) { _, _ in proxy.scrollTo("top", anchor: .top) }
             }
             .navigationTitle(editing ? "Edit outing" : "Plan an outing").navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button(step == .confirmed ? "Done" : "Cancel") { if step == .confirmed { dismiss() } else { discard = true } } }
+                if step.rawValue > 1 && step != .confirmed {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button { goBack() } label: { Label("Back", systemImage: "chevron.backward") }
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    if step == .confirmed {
+                        Button("Done") { dismiss() }
+                    } else {
+                        Menu("Options") {
+                            Button("Restart", role: .destructive) {
+                                restarting = true
+                                showConfirmation = true
+                            }
+                            Button("Cancel outing setup") {
+                                restarting = false
+                                showConfirmation = true
+                            }
+                        }
+                    }
+                }
             }
-            .confirmationDialog("Discard your unsaved changes?", isPresented: $discard, titleVisibility: .visible) {
-                Button("Discard changes", role: .destructive) { dismiss() }
-                Button("Keep planning", role: .cancel) { }
+            .confirmationDialog(restarting ? "Restart this outing?" : "Discard your unsaved changes?",
+                                isPresented: $showConfirmation, titleVisibility: .visible) {
+                if restarting {
+                    Button("Restart", role: .destructive) {
+                        draft = initial
+                        reviewed = false
+                        step = .event
+                    }
+                } else {
+                    Button("Discard changes", role: .destructive) { dismiss() }
+                }
+                Button("Keep planning", role: .cancel) {}
             }
         }.tint(ChapterTheme.green).interactiveDismissDisabled(step != .confirmed)
     }
@@ -120,7 +159,7 @@ struct OutingPlanner: View {
                     if draft.eventID != event.id { draft.meetingTime = "" }
                     draft.eventID = event.id
                 } label: {
-                    ChoiceCard(title: event.title, detail: "\(event.date) · \(event.startTime) · Free", selected: draft.eventID == event.id)
+                    ChoiceCard(title: event.title, detail: "\(event.date) · \(event.startTime) · \(event.priceLabel)", selected: draft.eventID == event.id)
                 }.buttonStyle(.plain)
             }
         case .name:
@@ -130,8 +169,8 @@ struct OutingPlanner: View {
                 TextField("Choose an outing name", text: $draft.name).font(ChapterTheme.label)
                     .submitLabel(.next).onSubmit { if canContinue { advance() } }.accessibilityIdentifier("outing-name")
             }.padding(14).background(ChapterTheme.card, in: RoundedRectangle(cornerRadius: 12))
-            Button { draft.name = draft.eventID == "potluck" ? "Our first Dallas potluck" : "Our first Dallas coffee" } label: {
-                ChoiceCard(title: draft.eventID == "potluck" ? "Our first Dallas potluck" : "Our first Dallas coffee", detail: "Use this name")
+            Button { draft.name = draft.event.suggestedOutingName } label: {
+                ChoiceCard(title: draft.event.suggestedOutingName, detail: "Use this name")
             }.buttonStyle(.plain)
         case .company:
             person("Maya R.", detail: "New to Dallas · Coffee & art · English")
@@ -141,7 +180,7 @@ struct OutingPlanner: View {
             Button { draft.meetingPoint = "At the venue entrance" } label: {
                 ChoiceCard(title: "At the venue entrance", detail: "Meeting point", selected: !draft.meetingPoint.isEmpty)
             }.buttonStyle(.plain)
-            let time = draft.eventID == "potluck" ? "4:45 PM" : "9:45 AM"
+            let time = draft.event.meetingTime
             Button { draft.meetingTime = time } label: {
                 ChoiceCard(title: time, detail: "Meet-up time · Dallas local time", selected: draft.meetingTime == time)
             }.buttonStyle(.plain)
@@ -178,6 +217,11 @@ struct OutingPlanner: View {
         }
     }
     private func advance() { if canContinue { step = PlannerStep(rawValue: step.rawValue + 1) ?? .review } }
+    private func goBack() {
+        guard let previous = PlannerStep(rawValue: step.rawValue - 1) else { return }
+        reviewed = false
+        step = previous
+    }
     private func person(_ name: String, detail: String) -> some View {
         Button { if draft.people.contains(name) { draft.people.remove(name) } else { draft.people.insert(name) } } label: {
             ChoiceCard(title: name, detail: detail, selected: draft.people.contains(name))
@@ -195,7 +239,7 @@ struct OutingPlanner: View {
 struct OutingSummary: View {
     let outing: Outing
     var body: some View {
-        InfoCard(title: outing.event.title, detail: "\(outing.event.date) · \(outing.event.time)\n\(outing.event.venue) · Free")
+        InfoCard(title: outing.event.title, detail: "\(outing.event.date) · \(outing.event.time)\n\(outing.event.venue) · \(outing.event.priceLabel)")
         Text("Your outing").font(ChapterTheme.heading)
         DetailRow(label: "Name", value: outing.name)
         DetailRow(label: "Meet-up location", value: outing.meetingPoint)

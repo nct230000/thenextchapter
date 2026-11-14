@@ -1,69 +1,52 @@
-<<<<<<< HEAD
-NEEDS TO BE EDITED!!
-
-Explains how your UI functions. 
-
-Include specific requirements for running your UI (e.g., test user ID/password, browser or device settings). 
-Instructions should be clear enough for anyone to set up and run your UI. 
-
-It’s your responsibility to include any installation requirements,operating instructions, and any limitations in the implementation. 
-Ideally, the prototype should be executable without needing to install additional software.
-=======
 # The Next Chapter
 
-A native SwiftUI iOS demo of the supplied Figma prototype. Includes the original Inter and DM Serif Display fonts, cream/green design tokens, and exported event artwork. No third-party runtime dependencies or account setup.
+The Next Chapter is a native iPhone prototype for discovering community events near Richardson, saving events for later, and planning an outing. It opens on Discover with three sample events ready to browse.
 
-## Run
+## Requirements
 
-1. Open `NextChapter.xcodeproj` in Xcode.
-2. Select the **NextChapter** scheme and an iPhone simulator.
-3. Press **⌘R**. Deployment target: iOS 17 or later.
+- **Simulator:** A Mac with full Xcode and an installed iOS Simulator runtime. The latest verified setup was **Xcode 27.2** with an **iPhone 17 simulator running iOS 27.2**.
+- **Physical device:** An iPhone running **iOS 17 or later** and an Apple development signing team configured in Xcode. The simulator is the quickest setup and requires no signing account.
+- **Credentials and settings:** No test username or password, browser, location permission, or special device settings are required. The repository includes the sample data, fonts, artwork, and app icon. There are no third-party packages or backend services to install. Once Xcode and the simulator runtime are installed, the demo runs offline.
 
-For a physical iPhone, choose your signing team in **Signing & Capabilities** first.
+## Run the app
 
-The project was built and tested with Xcode 26.3 on the iPhone 16e simulator running iOS 26.3.
+1. Download the repository as a ZIP from GitHub and extract it, or clone the repository if you already use Git.
+2. Open `NextChapter.xcodeproj` in Xcode. If this is your first time opening Xcode, complete its setup prompts. If no iPhone simulator is available, install an iOS runtime in **Xcode → Settings → Components**.
+3. Select the **NextChapter** scheme and an iPhone simulator in the Xcode toolbar. Use **iPhone 17** if it is available.
+4. Press **⌘R**. Xcode builds the project, starts the selected simulator, and opens the app on **Discover**. To reopen it from the simulator Home Screen, tap the cream-and-green **tnc** icon.
 
-## Demo walkthrough
+To run on a physical iPhone, connect it to the Mac, select it as the run destination, and choose your team under the **NextChapter** target’s **Signing & Capabilities** settings. Follow the device prompts for trust or Developer Mode if they appear, then press **⌘R**.
 
-- **Discover:** browse the two sample events, filter by food/culture or free indoor events, and open event details.
-- **Event details:** save/unsave, join/leave, inspect attendees, and start an outing.
-- **Saved:** revisit saved events and change the local reminder preference.
-- **Profile:** choose culture, language, interests, and distance/budget; view matching sample events.
-- **Plans:** choose an event, name the outing, select company, pick meeting arrangements and transport, choose a welcome note, and review visibility/reminder settings. Confirm the review to save the plan. Reopen a plan to edit or cancel it.
-- **Reset:** Profile → Reset demo clears this app’s local progress.
+## Use the demo
 
-Saved events, joined state, reminder choices, preferences, and confirmed outings survive app relaunches. Unsaved planner changes are discarded only after confirmation. Changing an existing plan updates it without creating a duplicate.
+| Tab or screen | What you can do |
+| --- | --- |
+| **Discover** | Browse the potluck, coffee meetup, and Bingo & Board Games. Search by event title, venue, category, or tag. Use **Event Size** to narrow the list, or **Filters & sort** for age range, category, tag, distance, price, date, and start time. Sort by soonest, nearest, or lowest price. **Discover near Richardson** opens preset filters. |
+| **Event details** | Tap a card to see the event time, venue, cost, and arrival information. Tap **Save event** to add it to Saved or **Join event** to mark yourself as joined. Tap the same control again to undo the choice. **See people attending** shows the sample attendee list, and **Plan to go together** opens the outing planner. |
+| **Saved** | Reopen saved events. Tap **Event reminder** and choose one day before, two hours before, 30 minutes before, or Off. The app stores your choice locally. |
+| **Profile** | Set your cultural connection, event language, interests, distance, and budget. Tap **Save & see my matches**. In the confirmation dialog, choose **Save & see my matches** to open the results or **Refine my preferences** to return to Profile. |
+| **Plans** | Start a new outing with **+ Plan an outing** or open a confirmed outing to review, edit, or cancel it. |
 
-## Demo boundaries
+### Plan an outing
 
-Events, attendees, travel estimates, and October 24–25 dates are sample content preserved from the prototype, not live listings. Joining does not reserve a place; invitations and notifications are not sent. Calendar is a preview and does not write to the device calendar. All app data stays in local UserDefaults. Visibility is invite-only; no backend or authentication is included.
+1. Choose an event and enter an outing name, or use the suggested name.
+2. Select any sample companions you want to include. Choose the meeting point and meet-up time, then select transport and a welcome note.
+3. Check the invite-only visibility, choose a group reminder, and tap **Review outing**.
+4. Turn on **I have checked the details**, then tap **Confirm outing**. The outing appears in **Plans**.
 
-The Figma file contains 51 frames, many representing selection states. The app implements these as stateful screens rather than 51 separate pages. Native navigation stacks, a system tab bar, sheets, and a review toggle provide iOS behavior. The user approved prototype/layer-text references for secondary screens after Figma reached its tool-call limit. Some single-option prototype pickers are consolidated into working choice cards; the outing name additionally supports free text. The app retains the non-glass appearance on iOS 26 to match the supplied design.
+The top-left **Back** button returns to the previous step with your choices intact. To start the setup again, choose **Options → Restart** and confirm. To exit the planner, choose **Options → Cancel outing setup**. From a confirmed plan, **Edit arrangements** updates the existing outing after you review and save your changes.
 
-## Source map
+To start with a clean demo, go to **Profile → Reset demo** and confirm. This clears saved events, joined status, reminders, preferences, and outings for this app on the current device or simulator.
 
-- `NextChapter/Models.swift`: sample data, local persistence, preferences, and outing validation.
-- `NextChapter/DesignSystem.swift`: reusable typography, colors, buttons, cards, and page layouts.
-- `NextChapter/EventViews.swift`: discovery, filtering, event details, saved events, reminders, and attendees.
-- `NextChapter/ProfileViews.swift`: preferences, matching, about, and reset.
-- `NextChapter/PlanViews.swift`: planner, review, confirmation, plan management, and calendar preview.
-- `NextChapter/Resources`: bundled fonts and their SIL Open Font License notices.
-- `NextChapter/Assets.xcassets`: named design colors and the original SVG artwork.
+## Prototype limits
 
-## Verification
+- The three event listings, attendees, dates, prices, distances, and travel estimates are fixed sample data. **Free & indoors this weekend** uses the sample weekend of October 24–25, 2026.
+- Joining records your choice on the device. The demo does not reserve a spot, send invitations or notifications, or charge for paid sample listings.
+- **Add to calendar** shows a preview. Calendar entries, live routes, and live travel updates are outside the demo.
+- Saved events, joined status, reminder choices, profile preferences, and confirmed outings persist on the current device. There is no account, backend, or cross-device sync. An outing draft stays in the planner until you confirm it or exit.
 
-Use **⌘U** to run the unit tests. They cover persistence after relaunch, save/unsave, joined state, reminder/preferences storage, incomplete-plan rejection, create/edit/cancel behavior, and reset isolation.
+## Testing
 
-Command-line build and test (choose an installed simulator name):
+With an iPhone simulator selected, press **⌘U** to run the tests. All seven tests passed on the iPhone 17 simulator with iOS 27.2. They cover local persistence, legacy preference migration, event filtering, outing validation and management, and resetting demo data.
 
-```bash
-DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild \
-  -project NextChapter.xcodeproj -scheme NextChapter \
-  -destination 'platform=iOS Simulator,name=iPhone 16e' \
-  -derivedDataPath build CODE_SIGNING_ALLOWED=NO test
-```
-
-Manual simulator checks performed during implementation: home layout and tab labels, original event artwork, save/join state changes, the complete seven-step outing flow, required-field validation, review-gated confirmation, preference selection and matching, and saved events/outings after relaunch.
-
-Design source: https://www.figma.com/design/xV7mUK7j6mZ8BOcHfFqvgR/Untitled?node-id=1-346
->>>>>>> a8bb9ff (Build SwiftUI demo)
+[Figma design](https://www.figma.com/design/xV7mUK7j6mZ8BOcHfFqvgR/Untitled?node-id=1-285)

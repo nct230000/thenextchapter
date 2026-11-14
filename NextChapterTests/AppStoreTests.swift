@@ -36,6 +36,59 @@ final class AppStoreTests: XCTestCase {
         XCTAssertTrue(store.state.outings.isEmpty)
     }
 
+    func testLegacyPreferencesPreserveSavedEventsAndMigrateDistanceAndBudget() {
+        let legacyState = """
+        {
+          "saved": ["coffee"],
+          "joined": [],
+          "reminders": {},
+          "preferences": {
+            "culture": "Turkish", "language": "Any language",
+            "interest": "Choose interests", "nearby": "5 miles · Free only"
+          },
+          "outings": []
+        }
+        """
+        defaults.set(Data(legacyState.utf8), forKey: "NextChapter.demo.v1")
+
+        let store = AppStore(defaults: defaults)
+        XCTAssertEqual(store.state.saved, ["coffee"])
+        XCTAssertEqual(store.state.preferences.culture, "Turkish")
+        XCTAssertEqual(store.state.preferences.distance, "5 miles")
+        XCTAssertEqual(store.state.preferences.budget, "Free only")
+
+        var preferences = store.state.preferences
+        preferences.distance = "15 miles"
+        store.setPreferences(preferences)
+        XCTAssertEqual(AppStore(defaults: defaults).state.preferences, preferences)
+    }
+
+    func testDiscoveryFiltersCombineAndKeepSampleWeekendSeparate() {
+        var filters = DiscoveryFilters()
+        XCTAssertEqual(filters.results(in: CommunityEvent.all).map(\.id), ["potluck", "coffee", "bingo"])
+        filters.size = .small
+        filters.maximumPrice = 0
+        XCTAssertEqual(filters.results(in: CommunityEvent.all).map(\.id), ["coffee"])
+        filters.maximumPrice = nil
+        filters.date = CommunityEvent.bingo.eventDate
+        filters.search = "diner"
+        XCTAssertEqual(filters.results(in: CommunityEvent.all).map(\.id), ["bingo"])
+        XCTAssertEqual(EventFilter.free.events.map(\.id), ["potluck", "coffee"])
+    }
+
+    func testBingoOutingRetainsItsEventAfterRelaunch() {
+        let store = AppStore(defaults: defaults)
+        var outing = validOuting()
+        outing.eventID = CommunityEvent.bingo.id
+        outing.meetingTime = CommunityEvent.bingo.meetingTime
+        XCTAssertTrue(store.saveOuting(outing))
+
+        let saved = AppStore(defaults: defaults).state.outings.first
+        XCTAssertEqual(saved?.event, CommunityEvent.bingo)
+        XCTAssertEqual(saved?.meetingTime, CommunityEvent.bingo.meetingTime)
+        XCTAssertNotEqual(saved?.meetingTime, CommunityEvent.coffee.meetingTime)
+    }
+
     func testCreateEditCancelOutingAndPersistence() {
         let store = AppStore(defaults: defaults)
         var outing = validOuting()

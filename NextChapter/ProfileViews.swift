@@ -5,6 +5,7 @@ struct ProfileView: View {
     @Binding var selectedTab: AppTab
     @State private var editor: PreferenceField?
     @State private var showMatches = false
+    @State private var showSuccess = false
     @State private var resetConfirmation = false
     var body: some View {
         ChapterPage {
@@ -12,13 +13,18 @@ struct ProfileView: View {
             preference(.culture, label: "Cultural connection", value: store.state.preferences.culture)
             preference(.language, label: "Event language", value: store.state.preferences.language)
             preference(.interest, label: "Interests", value: store.state.preferences.interest)
-            preference(.nearby, label: "Distance & budget", value: store.state.preferences.nearby)
-            Button("Save & see my matches") { showMatches = true }.buttonStyle(ChapterButtonStyle(primary: true))
+            preference(.distance, label: "Distance", value: store.state.preferences.distance)
+            preference(.budget, label: "Budget", value: store.state.preferences.budget)
+            Button("Save & see my matches") { showSuccess = true }.buttonStyle(ChapterButtonStyle(primary: true))
             NavigationLink { AboutView(selectedTab: $selectedTab) } label: { Text("About The Next Chapter") }.buttonStyle(ChapterButtonStyle(quiet: true))
             Button("Reset demo") { resetConfirmation = true }.font(ChapterTheme.small).foregroundStyle(ChapterTheme.muted).frame(maxWidth: .infinity, minHeight: 44)
         }
         .sheet(item: $editor) { field in PreferenceEditor(field: field) }
         .navigationDestination(isPresented: $showMatches) { MatchesView() }
+        .alert("Profile Creation Successful!", isPresented: $showSuccess) {
+            Button("Save & see my matches") { showMatches = true }
+            Button("Refine my preferences", role: .cancel) {}
+        }
         .confirmationDialog("Ready for a new chapter?", isPresented: $resetConfirmation, titleVisibility: .visible) {
             Button("Reset demo", role: .destructive) { store.reset(); selectedTab = .discover }
             Button("Keep my progress", role: .cancel) { }
@@ -37,37 +43,36 @@ struct PreferenceEditor: View {
         NavigationStack {
             ChapterPage {
                 PageHeading(eyebrow: field.eyebrow, title: field.title, subtitle: field.subtitle)
-                ForEach(field.choices, id: \.self) { choice in
+                ForEach(choices, id: \.self) { choice in
                     Button { select(choice); dismiss() } label: { ChoiceCard(title: choice, selected: current == choice) }.buttonStyle(.plain)
                 }
-                if field == .nearby { InfoCard(title: "Start small", detail: "A nearby, free event can make the first step feel easier.") }
             }.toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { dismiss() } } }
         }.tint(ChapterTheme.green).presentationDragIndicator(.visible)
     }
     private var current: String {
-        let p = store.state.preferences
-        switch field { case .culture: return p.culture; case .language: return p.language; case .interest: return p.interest; case .nearby: return p.nearby }
+        store.state.preferences[keyPath: field.value]
+    }
+    private var choices: [String] {
+        field.choices.contains(current) ? field.choices : [current] + field.choices
     }
     private func select(_ choice: String) {
         var p = store.state.preferences
-        switch field { case .culture: p.culture = choice; case .language: p.language = choice; case .interest: p.interest = choice; case .nearby: p.nearby = choice }
+        p[keyPath: field.value] = choice
         store.setPreferences(p)
     }
 }
 
 struct MatchesView: View {
     @Environment(AppStore.self) private var store
-    private var matches: [CommunityEvent] {
-        let p = store.state.preferences
-        if p.interest == "Food" || p.language == "Turkish" || p.culture == "Turkish" { return [.potluck] }
-        if p.interest == "Coffee" { return [.coffee] }
-        return CommunityEvent.all
-    }
     var body: some View {
+        let preferences = store.state.preferences
         ChapterPage {
             PageHeading(eyebrow: "YOUR NEXT CHAPTER", title: "A few familiar feelings.", subtitle: "Your preferences are saved. Explore a welcoming starting point.")
-            InfoCard(title: "Your selected preferences", detail: "\(store.state.preferences.culture) · \(store.state.preferences.language)\n\(store.state.preferences.interest) · \(store.state.preferences.nearby)")
-            ForEach(matches) { event in
+            InfoCard(title: "Your selected preferences", detail: "\(preferences.culture) · \(preferences.language)\n\(preferences.interest) · \(preferences.distance) · \(preferences.budget)")
+            if preferences.matches.isEmpty {
+                InfoCard(title: "No matches yet", detail: "Try changing your preferences to see more events.")
+            }
+            ForEach(preferences.matches) { event in
                 NavigationLink { EventDetailView(event: event) } label: { EventCard(event: event) }.buttonStyle(.plain)
             }
             Text("Picked for your interests and your neighborhood.").font(ChapterTheme.small).foregroundStyle(ChapterTheme.muted)

@@ -37,11 +37,11 @@ struct ChapterPage<Content: View>: View {
 }
 
 struct PageHeading: View {
-    let eyebrow: String
+    var eyebrow: String? = nil
     let title: String
     var subtitle: String? = nil
     var body: some View {
-        Text(eyebrow).font(ChapterTheme.small).foregroundStyle(ChapterTheme.muted)
+        if let eyebrow { Text(eyebrow).font(ChapterTheme.small).foregroundStyle(ChapterTheme.muted) }
         Text(title).font(ChapterTheme.title).lineSpacing(3).fixedSize(horizontal: false, vertical: true)
             .accessibilityAddTraits(.isHeader)
         if let subtitle { Text(subtitle).foregroundStyle(ChapterTheme.muted).fixedSize(horizontal: false, vertical: true) }
@@ -99,8 +99,16 @@ struct EventCard: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("\(event.date) · \(event.startTime)").font(ChapterTheme.small).foregroundStyle(ChapterTheme.orange)
             Text(event.title).font(ChapterTheme.heading).fixedSize(horizontal: false, vertical: true)
-            Text("\(event.venue) · \(event.distance, specifier: "%.1f") miles").font(ChapterTheme.small).foregroundStyle(ChapterTheme.muted)
-            if !compact { Text("\(event.languages) · \(event.newcomers) newcomers · Free").font(ChapterTheme.small) }
+            let commute = event.commuteMinutes.map { " (~\($0) min.)" } ?? ""
+            Text("\(event.venue) · \(event.distance, specifier: "%.1f") miles\(commute)")
+                .font(ChapterTheme.small).foregroundStyle(ChapterTheme.muted)
+            if !compact {
+                Text("\(event.languages) · \(event.newcomers) newcomers · \(event.priceLabel)").font(ChapterTheme.small)
+            } else {
+                Text(event.priceLabel).font(ChapterTheme.small)
+            }
+            Text(event.tags.joined(separator: " · "))
+                .font(ChapterTheme.small).foregroundStyle(ChapterTheme.green)
         }.frame(maxWidth: .infinity, alignment: .leading).padding(16)
             .background(ChapterTheme.card, in: RoundedRectangle(cornerRadius: 12))
             .contentShape(Rectangle())

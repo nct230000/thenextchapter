@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RootView: View {
     @Environment(AppStore.self) private var store
+    @State private var discoverStackID = UUID()
     var body: some View {
         @Bindable var store = store
         TabView(selection: $store.selectedTab) {
@@ -24,7 +25,13 @@ struct RootView: View {
                     }
                     .toolbar {
                         ToolbarItem(placement: .topBarLeading) {
-                            Text("the next chapter.").font(ChapterTheme.label).foregroundStyle(ChapterTheme.ink)
+                            Button {
+                                if store.selectedTab == .discover { discoverStackID = UUID() }
+                                store.selectedTab = .discover
+                            } label: {
+                                Text("the next chapter.").font(ChapterTheme.label).foregroundStyle(ChapterTheme.ink)
+                            }
+                            .accessibilityLabel("Discover home")
                         }
                         ToolbarItem(placement: .topBarTrailing) {
                             NavigationLink { FilterView() } label: {
@@ -36,11 +43,15 @@ struct RootView: View {
                     .toolbarBackground(.visible, for: .navigationBar)
                     .navigationBarTitleDisplayMode(.inline)
                 }
+                .id(tab == .discover ? discoverStackID : nil)
                 .tabItem {
                     Label { Text(tab.rawValue) } icon: { Image(uiImage: tabIcon(tab.glyph)) }
                 }.tag(tab)
             }
         }.tint(ChapterTheme.green).font(ChapterTheme.body)
+            .onChange(of: store.selectedTab) { _, tab in
+                if tab == .discover { discoverStackID = UUID() }
+            }
             .toolbarBackground(ChapterTheme.card, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
     }
