@@ -20,15 +20,12 @@ struct RootView: View {
                         case .discover: DiscoverView(selectedTab: $store.selectedTab)
                         case .saved: SavedView(selectedTab: $store.selectedTab)
                         case .plans: PlansView()
-                        case .profile: ProfileView(selectedTab: $store.selectedTab)
+                        case .profile: ProfileView(selectedTab: $store.selectedTab, goToDiscoverHome: goToDiscoverHome)
                         }
                     }
                     .toolbar {
                         ToolbarItem(placement: .topBarLeading) {
-                            Button {
-                                if store.selectedTab == .discover { discoverStackID = UUID() }
-                                store.selectedTab = .discover
-                            } label: {
+                            Button(action: goToDiscoverHome) {
                                 Text("the next chapter.").font(ChapterTheme.label).foregroundStyle(ChapterTheme.ink)
                             }
                             .accessibilityLabel("Discover home")
@@ -49,12 +46,15 @@ struct RootView: View {
                 }.tag(tab)
             }
         }.tint(ChapterTheme.green).font(ChapterTheme.body)
-            .onChange(of: store.selectedTab) { _, tab in
-                if tab == .discover { discoverStackID = UUID() }
-            }
             .toolbarBackground(ChapterTheme.card, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
     }
+
+    private func goToDiscoverHome() {
+        discoverStackID = UUID()
+        store.selectedTab = .discover
+    }
+
     private func tabIcon(_ glyph: String) -> UIImage {
         // The Figma navigation icons are monochrome text glyphs, not SF Symbols.
         let renderer = UIGraphicsImageRenderer(size: CGSize(width: 24, height: 24))

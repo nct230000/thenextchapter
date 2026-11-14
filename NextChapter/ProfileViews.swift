@@ -3,6 +3,7 @@ import SwiftUI
 struct ProfileView: View {
     @Environment(AppStore.self) private var store
     @Binding var selectedTab: AppTab
+    let goToDiscoverHome: () -> Void
     @State private var editor: PreferenceField?
     @State private var showMatches = false
     @State private var showSuccess = false
@@ -26,7 +27,10 @@ struct ProfileView: View {
             Button("Refine my preferences", role: .cancel) {}
         }
         .confirmationDialog("Ready for a new chapter?", isPresented: $resetConfirmation, titleVisibility: .visible) {
-            Button("Reset demo", role: .destructive) { store.reset(); selectedTab = .discover }
+            Button("Reset demo", role: .destructive) {
+                store.reset()
+                goToDiscoverHome()
+            }
             Button("Keep my progress", role: .cancel) { }
         } message: { Text("This clears saved events, preferences and outing plans on this device.") }
     }
