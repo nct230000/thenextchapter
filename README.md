@@ -1,6 +1,6 @@
 # The Next Chapter
 
-The Next Chapter is a native iPhone prototype for discovering community events near Richardson, saving events for later, and planning an outing. It opens on Discover with three sample events ready to browse.
+The Next Chapter is an iPhone prototype that helps people settle into new cities and meet others through local events. It helps newcomers decide whether an event feels right for them by showing which languages people speak, who else is new, and what to expect when they arrive. Once they find an event they like, they can put together an outing with a meeting spot, travel plans, and a welcome note.
 
 ## Requirements
 
@@ -13,15 +13,12 @@ The Next Chapter is a native iPhone prototype for discovering community events n
 1. Download the repository as a ZIP from GitHub and extract it, or clone the repository if you already use Git.
 2. Open `NextChapter.xcodeproj` in Xcode. If this is your first time opening Xcode, complete its setup prompts. If no iPhone simulator is available, install an iOS runtime in **Xcode → Settings → Components**.
 3. Select the **NextChapter** scheme and an iPhone simulator in the Xcode toolbar. Use **iPhone 17** if it is available.
-4. Press **⌘R**. Xcode builds the project, starts the selected simulator, and opens the app on **Discover**. To reopen it from the simulator Home Screen, tap the cream-and-green **tnc** icon.
-
-To run on a physical iPhone, connect it to the Mac, select it as the run destination, and choose your team under the **NextChapter** target’s **Signing & Capabilities** settings. Follow the device prompts for trust or Developer Mode if they appear, then press **⌘R**.
 
 ## Use the demo
 
 | Tab or screen | What you can do |
 | --- | --- |
-| **Discover** | Browse the potluck, coffee meetup, and Bingo & Board Games. Search by event title, venue, category, or tag. Use **Event Size** to narrow the list, or **Filters & sort** for age range, category, tag, distance, price, date, and start time. Sort by soonest, nearest, or lowest price. **Discover near Richardson** opens preset filters. |
+| **Discover** | Browse listed events. Search by event title, venue, category, or tag. Use **Event Size** to narrow the list, or **Filters & sort** for age range, category, tag, distance, price, date, and start time. Sort by soonest, nearest, or lowest price. **Browse welcoming events** opens preset filters. |
 | **Event details** | Tap a card to see the event time, venue, cost, and arrival information. Tap **Save event** to add it to Saved or **Join event** to mark yourself as joined. Tap the same control again to undo the choice. **See people attending** shows the sample attendee list, and **Plan to go together** opens the outing planner. |
 | **Saved** | Reopen saved events. Tap **Event reminder** and choose one day before, two hours before, 30 minutes before, or Off. The app stores your choice locally. |
 | **Profile** | Set your cultural connection, event language, interests, distance, and budget. Tap **Save Profile**. In the confirmation dialog, choose **See Matches** to open the results or **Back to Profile** to keep editing. |
@@ -44,9 +41,5 @@ To start with a clean demo, go to **Profile → Reset demo** and confirm. This c
 - Joining records your choice on the device. The demo does not reserve a spot, send invitations or notifications, or charge for paid sample listings.
 - **Add to calendar** shows a preview. Calendar entries, live routes, and live travel updates are outside the demo.
 - Saved events, joined status, reminder choices, profile preferences, and confirmed outings persist on the current device. There is no account, backend, or cross-device sync. An outing draft stays in the planner until you confirm it or exit.
-
-## Testing
-
-With an iPhone simulator selected, press **⌘U** to run the tests. All seven tests passed on the iPhone 17 simulator with iOS 27.2. They cover local persistence, legacy preference migration, event filtering, outing validation and management, and resetting demo data.
 
 [Figma design](https://www.figma.com/design/xV7mUK7j6mZ8BOcHfFqvgR/Untitled?node-id=1-285)
