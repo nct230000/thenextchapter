@@ -46,7 +46,7 @@ struct CommunityEvent: Identifiable, Hashable {
     static let bingo = CommunityEvent(
         id: "bingo", title: "Bingo & Board Games", category: "Games",
         day: 20261101, startMinute: 19 * 60, duration: 90,
-        venue: "Diner Café", distance: 1.4, commuteMinutes: nil, price: 5,
+        venue: "Diner Café", distance: 1.4, commuteMinutes: 5, price: 5,
         size: .small, ageGroup: "All ages", tags: ["Indoors", "Board games", "Beginner-friendly"],
         languages: "English", newcomers: 8,
        description: "Join us for a night of bingo and board games! Play either or play both. Bring your own board game or play one of ours. Our hosts will be happy to fill you in on the rules.",
