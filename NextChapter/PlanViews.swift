@@ -65,12 +65,9 @@ struct OutingPlanner: View {
     @State private var draft: Outing
     @State private var step: PlannerStep
     @State private var reviewed = false
-    @State private var showConfirmation = false
-    @State private var restarting = false
-    private let initial: Outing
+    @State private var confirmDiscard = false
     let editing: Bool
     init(initial: Outing, editing: Bool = false) {
-        self.initial = initial
         _draft = State(initialValue: initial)
         _step = State(initialValue: editing ? .name : .event)
         self.editing = editing
@@ -104,6 +101,13 @@ struct OutingPlanner: View {
                     if step.rawValue < PlannerStep.review.rawValue {
                         Button(step == .settings ? "Review outing →" : "Continue →") { advance() }
                             .buttonStyle(ChapterButtonStyle(primary: true)).disabled(!canContinue).accessibilityIdentifier("planner-continue")
+                        if step != .event {
+                            Button("Change event") {
+                                reviewed = false
+                                step = .event
+                            }
+                            .buttonStyle(ChapterButtonStyle())
+                        }
                     } else if step == .review {
                         Button(editing ? "Save changes" : "Confirm outing") {
                             if store.saveOuting(draft) { step = .confirmed }
@@ -123,30 +127,12 @@ struct OutingPlanner: View {
                     if step == .confirmed {
                         Button("Done") { dismiss() }
                     } else {
-                        Menu("Options") {
-                            Button("Restart", role: .destructive) {
-                                restarting = true
-                                showConfirmation = true
-                            }
-                            Button("Cancel outing setup") {
-                                restarting = false
-                                showConfirmation = true
-                            }
-                        }
+                        Button("Cancel") { confirmDiscard = true }
                     }
                 }
             }
-            .confirmationDialog(restarting ? "Restart this outing?" : "Discard your unsaved changes?",
-                                isPresented: $showConfirmation, titleVisibility: .visible) {
-                if restarting {
-                    Button("Restart", role: .destructive) {
-                        draft = initial
-                        reviewed = false
-                        step = .event
-                    }
-                } else {
-                    Button("Discard changes", role: .destructive) { dismiss() }
-                }
+            .confirmationDialog("Discard your unsaved changes?", isPresented: $confirmDiscard, titleVisibility: .visible) {
+                Button("Discard changes", role: .destructive) { dismiss() }
                 Button("Keep planning", role: .cancel) {}
             }
         }.tint(ChapterTheme.green).interactiveDismissDisabled(step != .confirmed)

@@ -34,7 +34,7 @@ To run on a physical iPhone, connect it to the Mac, select it as the run destina
 3. Check the invite-only visibility, choose a group reminder, and tap **Review outing**.
 4. Turn on **I have checked the details**, then tap **Confirm outing**. The outing appears in **Plans**.
 
-The top-left **Back** button returns to the previous step with your choices intact. To start the setup again, choose **Options → Restart** and confirm. To exit the planner, choose **Options → Cancel outing setup**. From a confirmed plan, **Edit arrangements** updates the existing outing after you review and save your changes.
+The top-left **Back** button returns to the previous step. Tap **Change event** below the main button to return to the event picker. The planner keeps your draft and clears the meet-up time if you select a different event. To exit, tap **Cancel** and confirm. From a confirmed plan, **Edit arrangements** updates the existing outing after you review and save your changes.
 
 To start with a clean demo, go to **Profile → Reset demo** and confirm. This clears saved events, joined status, reminders, preferences, and outings for this app on the current device or simulator.
 
