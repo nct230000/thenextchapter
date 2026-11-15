@@ -46,13 +46,45 @@ struct CommunityEvent: Identifiable, Hashable {
     static let bingo = CommunityEvent(
         id: "bingo", title: "Bingo & Board Games", category: "Games",
         day: 20261101, startMinute: 19 * 60, duration: 90,
-        venue: "Diner Café", distance: 1.4, commuteMinutes: 5, price: 5,
+        venue: "Diner Café", distance: 1.1, commuteMinutes: 5, price: 5,
         size: .small, ageGroup: "All ages", tags: ["Indoors", "Board games", "Beginner-friendly"],
         languages: "English", newcomers: 8,
-       description: "Join us for a night of bingo and board games! Play either or play both. Bring your own board game or play one of ours. Our hosts will be happy to fill you in on the rules.",
+        description: "Join us for a night of bingo and board games! Play either or play both. Bring your own board game or play one of ours. Our hosts will be happy to fill you in on the rules.",
         arrivalInfo: "Indoor seating · Beginner-friendly · Food and drinks purchased separately", suggestedOutingName: "Dallas game night")
+    static let walk = CommunityEvent(
+        id: "walk", title: "Morning Walk Club", category: "Meet & mingle",
+        day: 20261107, startMinute: 9 * 60, duration: 60,
+        venue: "Local Park", distance: 1.4, commuteMinutes: 10, price: 0,
+        size: .large, ageGroup: "Adults", tags: ["Outdoors", "Conversation", "Casual", "Newcomers"],
+        languages: "English", newcomers: 16,
+        description: "Get your steps in while getting to know members of your community. Perhaps you'll walk away with a new friend.",
+        arrivalInfo: "Meet at the Gazebo · Walk begins promptly at 9:10AM", suggestedOutingName: "Morning Walk at the Park")
+    static let brunch = CommunityEvent(
+        id: "walk", title: "Ladies' Brunch", category: "Meet & mingle",
+        day: 20261108, startMinute: 12 * 60, duration: 120,
+        venue: "Brunch Spot", distance: 2.4, commuteMinutes: 20, price: 30,
+        size: .small, ageGroup: "Adults", tags: ["Indoors", "Conversation", "Women", "Brunch"],
+        languages: "English", newcomers: 4,
+        description: "Enjoy brunch while getting to know women in your local community.",
+        arrivalInfo: "Free Street Parking · Pay for Yourself", suggestedOutingName: "Brunch with Dallas Women")
+    static let puzzles = CommunityEvent(
+        id: "puzzles", title: "Puzzles & Play", category: "Games & Movies",
+        day: 20261108, startMinute: 18 * 60, duration: 90,
+        venue: "Public Library", distance: 1.4, commuteMinutes: 10, price: 0,
+        size: .small, ageGroup: "All Ages", tags: ["Indoors", "Puzzles", "Casual", "Movie", "Library"],
+        languages: "English", newcomers: 5,
+        description: "Work on jigsaw puzzles while a cozy fall movie plays. Bring your own puzzle or work on one of the library's. Come to connect (puzzle pieces) and/or enjoy a movie.",
+        arrivalInfo: "First floor large meeting room 1" · "Vote on a movie" · "Have fun connecting!", suggestedOutingName: "Puzzle Night at the Library")
+    static let storytime = CommunityEvent(
+        id: "storytime", title: "Children's Storytime", category: "Meet & mingle",
+        day: 20261114, startMinute: 17 * 60, duration: 60,
+        venue: "Public Library", distance: 1.4, commuteMinutes: 10, price: 0,
+        size: .small, ageGroup: "All Ages", tags: ["Indoors", "Parents", "Casual", "Library"],
+        languages: "English", newcomers: 6,
+        description: "Bring your children to storytime and chat with other parents.",
+        arrivalInfo: "Children's corner of library" · "Low volume please", suggestedOutingName: "Children's Storytime at the Library")
 
-    static let all = [potluck, coffee, bingo]
+    static let all = [potluck, coffee, bingo, walk, brunch, puzzles, storytime]
     static let calendar = Calendar(identifier: .gregorian)
     static func find(_ id: String) -> CommunityEvent { all.first { $0.id == id } ?? potluck }
 
