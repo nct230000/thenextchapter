@@ -37,7 +37,7 @@ To start with a clean demo, go to **Profile → Reset demo** and confirm. This c
 
 ## Prototype limits
 
-- The three event listings, attendees, dates, prices, distances, and travel estimates are fixed sample data. **Free & indoors this weekend** uses the sample weekend of October 24–25, 2026.
+- The seven event listings, attendees, dates, prices, distances, and travel estimates are fixed sample data. **Free & indoors this weekend** uses the sample weekend of October 24–25, 2026.
 - Joining records your choice on the device. The demo does not reserve a spot, send invitations or notifications, or charge for paid sample listings.
 - **Add to calendar** shows a preview. Calendar entries, live routes, and live travel updates are outside the demo.
 - Saved events, joined status, reminder choices, profile preferences, and confirmed outings persist on the current device. There is no account, backend, or cross-device sync. An outing draft stays in the planner until you confirm it or exit.
