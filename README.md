@@ -2,6 +2,12 @@
 
 The Next Chapter is an iPhone prototype that helps people settle into new cities and meet others through local events. It helps newcomers decide whether an event feels right for them by showing which languages people speak, who else is new, and what to expect when they arrive. Once they find an event they like, they can put together an outing with a meeting spot, travel plans, and a welcome note.
 
+## Examples
+
+| Discover | Saved | Plans | Profile |
+| --- | --- | --- | --- |
+| <img src="examples/Discover.png" alt="Discover tab showing event search, filters, and event listings" width="190"> | <img src="examples/Saved.png" alt="Saved tab showing bookmarked events and reminders" width="190"> | <img src="examples/Plans.png" alt="Plans tab showing confirmed outings and the option to plan a new outing" width="190"> | <img src="examples/Profile.png" alt="Profile tab showing event preferences and the Save Profile button" width="190"> |
+
 ## Requirements
 
 - **Simulator:** A Mac with full Xcode and an installed iOS Simulator runtime. The latest verified setup was **Xcode 27.2** with an **iPhone 17 simulator running iOS 27.2**.
