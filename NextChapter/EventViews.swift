@@ -7,15 +7,14 @@ struct DiscoverView: View {
     var body: some View {
         let results = filters.results(in: CommunityEvent.all)
         ChapterPage {
-            NavigationLink { FilterView() } label: {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("A NEW CITY. YOUR PEOPLE.").font(ChapterTheme.small).foregroundStyle(ChapterTheme.lime)
-                    Text("Your next\nconnection starts\nhere.").font(ChapterTheme.title).lineSpacing(3)
-                        .foregroundStyle(ChapterTheme.card).fixedSize(horizontal: false, vertical: true)
-                    Text("Find a familiar feeling, somewhere new.").font(ChapterTheme.small).foregroundStyle(ChapterTheme.lime)
-                }.frame(maxWidth: .infinity, alignment: .leading).padding(22)
-                    .background(ChapterTheme.green, in: RoundedRectangle(cornerRadius: 12))
-            }.buttonStyle(.plain)
+            VStack(alignment: .leading, spacing: 10) {
+                Text("A NEW CITY. YOUR PEOPLE.").font(ChapterTheme.small).foregroundStyle(ChapterTheme.lime)
+                Text("Your next\nconnection starts\nhere.").font(ChapterTheme.title).lineSpacing(3)
+                    .foregroundStyle(ChapterTheme.card).fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                Text("Find a familiar feeling, somewhere new.").font(ChapterTheme.small).foregroundStyle(ChapterTheme.lime)
+            }.frame(maxWidth: .infinity, alignment: .leading).padding(22)
+                .background(ChapterTheme.green, in: RoundedRectangle(cornerRadius: 12))
             NavigationLink { FilterView() } label: {
                 FieldCard(label: "Discover near Richardson", value: "Browse welcoming events")
             }.buttonStyle(.plain)

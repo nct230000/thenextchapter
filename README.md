@@ -24,7 +24,7 @@ To run on a physical iPhone, connect it to the Mac, select it as the run destina
 | **Discover** | Browse the potluck, coffee meetup, and Bingo & Board Games. Search by event title, venue, category, or tag. Use **Event Size** to narrow the list, or **Filters & sort** for age range, category, tag, distance, price, date, and start time. Sort by soonest, nearest, or lowest price. **Discover near Richardson** opens preset filters. |
 | **Event details** | Tap a card to see the event time, venue, cost, and arrival information. Tap **Save event** to add it to Saved or **Join event** to mark yourself as joined. Tap the same control again to undo the choice. **See people attending** shows the sample attendee list, and **Plan to go together** opens the outing planner. |
 | **Saved** | Reopen saved events. Tap **Event reminder** and choose one day before, two hours before, 30 minutes before, or Off. The app stores your choice locally. |
-| **Profile** | Set your cultural connection, event language, interests, distance, and budget. Tap **Save & see my matches**. In the confirmation dialog, choose **Save & see my matches** to open the results or **Refine my preferences** to return to Profile. |
+| **Profile** | Set your cultural connection, event language, interests, distance, and budget. Tap **Save Profile**. In the confirmation dialog, choose **See Matches** to open the results or **Back to Profile** to keep editing. |
 | **Plans** | Start a new outing with **+ Plan an outing** or open a confirmed outing to review, edit, or cancel it. |
 
 ### Plan an outing

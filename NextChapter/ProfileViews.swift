@@ -7,6 +7,7 @@ struct ProfileView: View {
     @State private var editor: PreferenceField?
     @State private var showMatches = false
     @State private var showSuccess = false
+    @State private var openMatchesAfterConfirmation = false
     @State private var resetConfirmation = false
     var body: some View {
         ChapterPage {
@@ -16,15 +17,26 @@ struct ProfileView: View {
             preference(.interest, label: "Interests", value: store.state.preferences.interest)
             preference(.distance, label: "Distance", value: store.state.preferences.distance)
             preference(.budget, label: "Budget", value: store.state.preferences.budget)
-            Button("Save & see my matches") { showSuccess = true }.buttonStyle(ChapterButtonStyle(primary: true))
+            Button("Save Profile") { showSuccess = true }.buttonStyle(ChapterButtonStyle(primary: true))
             NavigationLink { AboutView(selectedTab: $selectedTab) } label: { Text("About The Next Chapter") }.buttonStyle(ChapterButtonStyle(quiet: true))
             Button("Reset demo") { resetConfirmation = true }.font(ChapterTheme.small).foregroundStyle(ChapterTheme.muted).frame(maxWidth: .infinity, minHeight: 44)
         }
         .sheet(item: $editor) { field in PreferenceEditor(field: field) }
         .navigationDestination(isPresented: $showMatches) { MatchesView() }
-        .alert("Profile Creation Successful!", isPresented: $showSuccess) {
-            Button("Save & see my matches") { showMatches = true }
-            Button("Refine my preferences", role: .cancel) {}
+        .fullScreenCover(isPresented: $showSuccess, onDismiss: {
+            if openMatchesAfterConfirmation {
+                openMatchesAfterConfirmation = false
+                showMatches = true
+            }
+        }) {
+            ProfileSuccessConfirmation(
+                seeMatches: {
+                    openMatchesAfterConfirmation = true
+                    showSuccess = false
+                },
+                backToProfile: { showSuccess = false }
+            )
+            .presentationBackground(.clear)
         }
         .confirmationDialog("Ready for a new chapter?", isPresented: $resetConfirmation, titleVisibility: .visible) {
             Button("Reset demo", role: .destructive) {
@@ -36,6 +48,51 @@ struct ProfileView: View {
     }
     private func preference(_ field: PreferenceField, label: String, value: String) -> some View {
         Button { editor = field } label: { FieldCard(label: label, value: value) }.buttonStyle(.plain)
+    }
+}
+
+private struct ProfileSuccessConfirmation: View {
+    let seeMatches: () -> Void
+    let backToProfile: () -> Void
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.4).ignoresSafeArea().accessibilityHidden(true)
+
+            ViewThatFits(in: .vertical) {
+                confirmationCard
+                ScrollView { confirmationCard.frame(maxWidth: .infinity) }
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 16)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityAction(.escape) { backToProfile() }
+    }
+
+    private var confirmationCard: some View {
+        VStack(spacing: 72) {
+            Text("Profile\nCreation\nSuccessful!")
+                .font(ChapterTheme.title)
+                .foregroundStyle(ChapterTheme.ink)
+                .multilineTextAlignment(.center)
+                .lineSpacing(6)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityLabel("Profile Creation Successful!")
+                .accessibilityAddTraits(.isHeader)
+
+            VStack(spacing: 7) {
+                Button("See Matches", action: seeMatches)
+                    .buttonStyle(ChapterButtonStyle(primary: true))
+                Button("Back to Profile", action: backToProfile)
+                    .buttonStyle(ChapterButtonStyle())
+            }
+        }
+        .padding(.horizontal, 25)
+        .padding(.top, 74)
+        .padding(.bottom, 22)
+        .frame(maxWidth: 300)
+        .background(ChapterTheme.cream, in: RoundedRectangle(cornerRadius: 12))
     }
 }
 
