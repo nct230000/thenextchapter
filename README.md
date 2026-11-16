@@ -50,4 +50,4 @@ To start with a clean demo, go to **Profile → Reset demo** and confirm. This c
 
 [Figma design](https://www.figma.com/design/xV7mUK7j6mZ8BOcHfFqvgR/Untitled?node-id=1-285)
 
-[Video Walkthrough](https://youtube.com/shorts/Flvc576TyRI?is=-SMt7wvLNz_rvArM)
+[Video Walkthrough](https://youtube.com/shorts/Xk4lbFmzKUQ?is=V6mkmFmUjmCZD_yk)
