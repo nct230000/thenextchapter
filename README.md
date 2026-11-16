@@ -49,3 +49,4 @@ To start with a clean demo, go to **Profile → Reset demo** and confirm. This c
 - Saved events, joined status, reminder choices, profile preferences, and confirmed outings persist on the current device. There is no account, backend, or cross-device sync. An outing draft stays in the planner until you confirm it or exit.
 
 [Figma design](https://www.figma.com/design/xV7mUK7j6mZ8BOcHfFqvgR/Untitled?node-id=1-285)
+[Video Walkthrough](https://youtube.com/shorts/Flvc576TyRI?is=-SMt7wvLNz_rvArM)
