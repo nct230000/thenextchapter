@@ -42,7 +42,7 @@ struct CommunityEvent: Identifiable, Hashable {
         size: .small, ageGroup: "Adults", tags: ["Indoors", "Conversation", "Coffee", "Newcomers"],
         languages: "English", newcomers: 10,
         description: "Small tables and friendly conversation prompts make it easy to meet others making Dallas home. All English levels welcome.",
-        arrivalInfo: "Indoor seating · Drinks purchased separately", suggestedOutingName: "Our first Dallas coffee")
+        arrivalInfo: "When you arrive, meet with the host and they will introduce you to everyone else!", suggestedOutingName: "Our first Dallas coffee")
     static let bingo = CommunityEvent(
         id: "bingo", title: "Bingo & Board Games", category: "Games",
         day: 20261101, startMinute: 19 * 60, duration: 90,
